@@ -1,0 +1,20 @@
+package com.sample
+
+import com.sample.DroolsTest.Message;
+
+rule "sayHi"
+    when
+        m : Message( status == Message.HELLO, myMessage : message )
+    then
+        System.out.println( myMessage );
+        m.setMessage( "Add Drools Tag" );
+        m.setStatus( Message.GOODBYE );
+        update( m );
+end
+
+rule "sayBye"
+    when
+        Message( status == Message.GOODBYE, myMessage : message )
+    then
+        System.out.println( myMessage );
+end

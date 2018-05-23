@@ -1,0 +1,24 @@
+package com.StatisticTrans
+
+import com.entity.StatisticTrans;
+import com.entity.Trans;
+import com.service.NoticeService;
+import java.util.*;
+
+function boolean filterData(String seqNo,double transAmountSum,double parameter){
+	if(transAmountSum >= parameter){
+	  NoticeService.notice(seqNo);
+	  return true;
+	}else{
+	  return false;
+	}
+}
+
+rule "activitySucc"
+when
+   $statistic:StatisticTrans();
+   $trans:Trans() from $statistic.transList;
+   eval((filterData($trans.getSequenNo(),$trans.getTransAmountSum(),5000)));
+then
+   $statistic.setRuleResult($trans.getSequenNo());
+end
